@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Inventario</title>
+  <title>Inventario Hkjo.</title>
 
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="icon-192.png">
   <link rel="apple-touch-icon" href="icon-180.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Inventario">
+  <meta name="apple-mobile-web-app-title" content="Inventario Hkjo.">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#5B7F4A">
@@ -51,6 +51,27 @@
     @keyframes girar { to { transform: rotate(360deg); } }
     noscript { display: block; padding: 24px; font-family: sans-serif; text-align: center; }
     .hidden { display: none; }
+    #marco {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #FAFAF8;
+    }
+    #ayuda {
+      position: fixed;
+      left: 0; right: 0;
+      bottom: env(safe-area-inset-bottom, 0px);
+      padding: 8px 12px;
+      text-align: center;
+      font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      font-size: 12.5px;
+      color: #5a5650;
+      background: rgba(250,250,248,0.96);
+      border-top: 1px solid #e3e3e0;
+    }
+    #ayuda a { color: #5B7F4A; font-weight: 600; }
     #instalar {
       position: fixed;
       inset: 0;
@@ -85,15 +106,19 @@
   <div id="cargando">
     <img src="icon-192.png" alt="">
     <div class="spinner"></div>
-    <span>Abriendo Inventario…</span>
+    <span>Abriendo Inventario Hkjo.…</span>
   </div>
 
   <div id="instalar" class="hidden">
     <img src="icon-192.png" alt="">
-    <h2>Inventario</h2>
-    <p>Para instalarla con el ícono correcto: abre el menú (⋮) de Chrome y toca <b>“Agregar a pantalla de inicio”</b> o <b>“Instalar app”</b>.</p>
-    <button onclick="ir()">Abrir sin instalar</button>
+    <h2>Inventario Hkjo.</h2>
+    <p id="txtAndroid">Para instalarla con el ícono correcto: abre el menú (⋮) de Chrome y toca <b>“Agregar a pantalla de inicio”</b> o <b>“Instalar app”</b>.</p>
+    <p id="txtIphone" class="hidden">Para instalarla en tu iPhone: abre esta página en <b>Safari</b>, toca el botón <b>Compartir</b> (el cuadro con una flecha hacia arriba) y elige <b>“Añadir a pantalla de inicio”</b>. Luego toca <b>“Añadir”</b>.</p>
+    <button onclick="abrir()">Abrir sin instalar</button>
   </div>
+
+  <iframe id="marco" class="hidden" title="Inventario Hkjo." allow="clipboard-write"></iframe>
+  <div id="ayuda" class="hidden">¿Se ve en blanco o pide iniciar sesión? <a href="#" onclick="ir();return false;">Abrir directo</a></div>
 
   <noscript>
     <p>Activa JavaScript, o entra directo a
@@ -102,26 +127,56 @@
   </noscript>
 
   <script>
+    var URL_APP = 'https://script.google.com/macros/s/AKfycbwf7ptkeOG2zGGYGfjymuIbxWmyXqoQXXaoqMhSMVIaCxgYAfFPYcxUXb-mXD1mo08TFA/exec';
+
+    // iPhone / iPad: Safari bloquea las cookies de terceros dentro de un
+    // marco, asi que ahi la app se abre siempre en pantalla completa
+    // directa (el aviso de Google se queda, pero se cierra con la X).
+    var esIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+      || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    // Abrir directo (sin marco): sirve de salida si el marco no carga.
     function ir() {
-      location.replace(
-        'https://script.google.com/macros/s/AKfycbwf7ptkeOG2zGGYGfjymuIbxWmyXqoQXXaoqMhSMVIaCxgYAfFPYcxUXb-mXD1mo08TFA/exec'
-      );
+      location.replace(URL_APP);
     }
 
-    // Si la app ya esta instalada (se abrio desde el icono en la
-    // pantalla de inicio), salta casi de inmediato: no hace falta
-    // esperar nada porque el icono ya quedo bien guardado.
+    // Android y PC: la app se muestra dentro de esta pagina, a pantalla
+    // completa. Asi Google no muestra el aviso "Un usuario de Google
+    // Apps Script creo esta aplicacion".
+    function enMarco() {
+      document.getElementById('cargando').classList.add('hidden');
+      document.getElementById('instalar').classList.add('hidden');
+      var f = document.getElementById('marco');
+      f.classList.remove('hidden');
+      f.src = URL_APP;
+      // Ayuda para salir si el marco queda en blanco; se oculta sola.
+      var ay = document.getElementById('ayuda');
+      ay.classList.remove('hidden');
+      f.addEventListener('load', function () {
+        setTimeout(function () { ay.classList.add('hidden'); }, 9000);
+      });
+    }
+
+    function abrir() {
+      if (esIOS) ir(); else enMarco();
+    }
+
     var instalada = window.matchMedia('(display-mode: standalone)').matches
       || window.navigator.standalone === true;
+    var directo = /(^|[?&])directo(=|&|$)/.test(location.search);
 
-    if (instalada) {
-      setTimeout(ir, 50);
+    if (directo) {
+      ir();
+    } else if (instalada) {
+      // Abierta desde el icono de la pantalla de inicio.
+      setTimeout(abrir, 50);
     } else {
-      // Primera vez / navegador normal: NO redirige sola. Se queda en
-      // esta pantalla para dar tiempo (sin apuro) a usar "Agregar a
-      // pantalla de inicio" / "Instalar app" del menu de Chrome con el
-      // icono correcto. Quien no quiera instalarla puede tocar el boton
-      // para seguir igual.
+      // Primera vez / navegador normal: NO abre sola. Muestra como
+      // instalarla (con el ícono correcto) y un boton para seguir igual.
+      if (esIOS) {
+        document.getElementById('txtAndroid').classList.add('hidden');
+        document.getElementById('txtIphone').classList.remove('hidden');
+      }
       document.getElementById('cargando').classList.add('hidden');
       document.getElementById('instalar').classList.remove('hidden');
     }
@@ -135,4 +190,3 @@
 
 </body>
 </html>
- 
