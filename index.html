@@ -188,5 +188,15 @@
     }
   </script>
 
+<script>
+  // Vibración al tocar: la app (dentro del marco) avisa y el lanzador vibra.
+  window.addEventListener('message', function (e) {
+    var o = String(e.origin || '');
+    if (!/\.googleusercontent\.com$|^https:\/\/script\.google\.com$/.test(o)) return;
+    var d = e.data;
+    if (!d || typeof d.hkjoVibrar !== 'number') return;
+    try { if (navigator.vibrate) navigator.vibrate(Math.max(5, Math.min(60, d.hkjoVibrar))); } catch (err) {}
+  });
+</script>
 </body>
 </html>
