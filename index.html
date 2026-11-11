@@ -258,7 +258,14 @@
     if (!/\.googleusercontent\.com$|^https:\/\/script\.google\.com$/.test(o)) return;
     var d = e.data;
     if (!d || typeof d.hkjoVibrar !== 'number') return;
-    try { if (navigator.vibrate) navigator.vibrate(Math.max(5, Math.min(60, d.hkjoVibrar))); } catch (err) {}
+    var ok = false;
+    try { if (navigator.vibrate) ok = navigator.vibrate(d.prueba ? 400 : Math.max(5, Math.min(60, d.hkjoVibrar))); } catch (err) {}
+    if (d.prueba && e.source) {
+      try {
+        e.source.postMessage({ hkjoVibroRes: { ok: !!ok, soporta: !!navigator.vibrate,
+          activo: !!(navigator.userActivation && navigator.userActivation.hasBeenActive) } }, e.origin);
+      } catch (err) {}
+    }
   });
 </script>
 </body>
