@@ -99,6 +99,22 @@
       font-weight: 600;
       cursor: pointer;
     }
+    #instalar { overflow-y: auto; justify-content: flex-start; padding-top: max(36px, env(safe-area-inset-top)); padding-bottom: 40px; }
+    #instalar .ins-sub { margin: -4px 0 4px; font-size: 15px; }
+    #instalar .ins-card { width: 100%; max-width: 380px; background: #fff; color: #2E2A26; border-radius: 18px; padding: 18px 16px; box-shadow: 0 8px 22px rgba(14,34,54,.35); text-align: left; box-sizing: border-box; }
+    #instalar .ins-card p { color: #2E2A26; max-width: none; }
+    #instalar .ins-btn { display: block; text-align: center; text-decoration: none; background: linear-gradient(160deg, #E9BC55, #C9922E); color: #2E2A26; font-weight: 800; font-size: 17px; padding: 15px 12px; border-radius: 14px; box-shadow: 0 4px 0 #A8802B, 0 6px 14px rgba(0,0,0,.2); }
+    #instalar .ins-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #A8802B; }
+    #instalar .ins-pasos { margin: 14px 0 4px; padding-left: 22px; font-size: 14.5px; line-height: 1.5; color: #2E2A26; }
+    #instalar .ins-pasos li { margin-bottom: 8px; }
+    #instalar .ins-ico { width: 20px; height: 20px; vertical-align: -4px; margin: 0 2px; }
+    #instalar .ins-nota { font-size: 13px; color: #5a5650 !important; margin-top: 8px !important; }
+    #instalar .ins-link { background: none; color: #2F5D85; padding: 6px 0; margin: 4px 0 0; font-size: 13.5px; font-weight: 700; text-decoration: underline; box-shadow: none; }
+    #instalar .ins-aviso { background: #FFF3CD; border: 1px solid #F0C36D; color: #7A5B00; border-radius: 12px; padding: 10px 12px; font-size: 13.5px; line-height: 1.45; margin-bottom: 6px; }
+    #instalar .ins-copiar { display: block; margin-top: 8px; background: #7A5B00; color: #fff; padding: 8px 14px; font-size: 13px; }
+    #instalar .ins-qr { width: 200px; height: 200px; margin: 10px auto; padding: 8px; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+    #instalar .ins-qr svg { width: 100%; height: 100%; display: block; }
+    #instalar .ins-sec { background: rgba(255,255,255,.16); color: #F6F3EC; border: 1px solid rgba(255,255,255,.35); }
   </style>
 </head>
 <body>
@@ -112,9 +128,36 @@
   <div id="instalar" class="hidden">
     <img src="icon-192.png" alt="">
     <h2>Inventario Hkjo.</h2>
-    <p id="txtAndroid">Para instalarla con el ícono correcto: abre el menú (⋮) de Chrome y toca <b>“Agregar a pantalla de inicio”</b> o <b>“Instalar app”</b>.</p>
-    <p id="txtIphone" class="hidden">Para instalarla en tu iPhone: abre esta página en <b>Safari</b>, toca el botón <b>Compartir</b> (el cuadro con una flecha hacia arriba) y elige <b>“Añadir a pantalla de inicio”</b>. Luego toca <b>“Añadir”</b>.</p>
-    <button onclick="abrir()">Abrir sin instalar</button>
+    <p class="ins-sub">Instala la app en tu celular</p>
+
+    <div id="insAndroid" class="ins-card hidden">
+      <a class="ins-btn" href="https://github.com/hiltonkjo76-ui/comparativo-hkjo/releases/download/inventario-apk/InventarioHkjo.apk">⬇ Descargar app para Android</a>
+      <ol class="ins-pasos">
+        <li>Toca el botón y, cuando termine de bajar, abre <b>InventarioHkjo.apk</b>.</li>
+        <li>Si el celular lo pide, toca <b>Configuración</b> y activa <b>Permitir de esta fuente</b>.</li>
+        <li>Toca <b>Instalar</b> y luego <b>Abrir</b>.</li>
+      </ol>
+      <button class="ins-link" onclick="instalarChrome()">¿No se puede? Instalar desde Chrome</button>
+      <p id="insChrome" class="ins-nota hidden">En Chrome toca <b>⋮</b> (arriba a la derecha) y elige <b>Agregar a pantalla de inicio</b> o <b>Instalar app</b>.</p>
+    </div>
+
+    <div id="insIphone" class="ins-card hidden">
+      <div id="insNoSafari" class="ins-aviso hidden">En iPhone se instala desde <b>Safari</b>. Copia el link y ábrelo en Safari.
+        <button class="ins-copiar" onclick="copiarLink(this)">Copiar link</button></div>
+      <ol class="ins-pasos">
+        <li>Toca <b>Compartir</b> <svg class="ins-ico" viewBox="0 0 24 24" fill="none" stroke="#0A84FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg> en la barra de Safari.</li>
+        <li>Baja y elige <b>Agregar a inicio</b> <svg class="ins-ico" viewBox="0 0 24 24" fill="none" stroke="#2E2A26" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/></svg>.</li>
+        <li>Toca <b>Agregar</b>. Queda el ícono en tu pantalla y se abre a pantalla completa.</li>
+      </ol>
+    </div>
+
+    <div id="insPc" class="ins-card hidden">
+      <p style="text-align:center;margin:0">Escanea este código con la cámara del celular:</p>
+      <div class="ins-qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" shape-rendering="crispEdges"><rect width="37" height="37" fill="#fff"/><path d="M2 2h7v1h-7zM12 2h2v1h-2zM20 2h3v1h-3zM25 2h1v1h-1zM28 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM17 3h1v1h-1zM20 3h1v1h-1zM22 3h2v1h-2zM28 3h1v1h-1zM34 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h2v1h-2zM13 4h2v1h-2zM16 4h1v1h-1zM22 4h2v1h-2zM25 4h1v1h-1zM28 4h1v1h-1zM30 4h3v1h-3zM34 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h1v1h-1zM13 5h1v1h-1zM17 5h1v1h-1zM20 5h1v1h-1zM24 5h3v1h-3zM28 5h1v1h-1zM30 5h3v1h-3zM34 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h4v1h-4zM15 6h5v1h-5zM22 6h1v1h-1zM25 6h1v1h-1zM28 6h1v1h-1zM30 6h3v1h-3zM34 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h1v1h-1zM12 7h1v1h-1zM14 7h3v1h-3zM20 7h2v1h-2zM24 7h1v1h-1zM28 7h1v1h-1zM34 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h1v1h-1zM26 8h1v1h-1zM28 8h7v1h-7zM10 9h1v1h-1zM14 9h1v1h-1zM18 9h1v1h-1zM21 9h3v1h-3zM2 10h1v1h-1zM4 10h5v1h-5zM11 10h3v1h-3zM15 10h2v1h-2zM19 10h4v1h-4zM24 10h3v1h-3zM28 10h5v1h-5zM2 11h1v1h-1zM5 11h1v1h-1zM9 11h1v1h-1zM12 11h2v1h-2zM15 11h1v1h-1zM18 11h5v1h-5zM25 11h1v1h-1zM28 11h2v1h-2zM31 11h2v1h-2zM34 11h1v1h-1zM3 12h1v1h-1zM6 12h1v1h-1zM8 12h1v1h-1zM10 12h1v1h-1zM13 12h1v1h-1zM15 12h5v1h-5zM22 12h1v1h-1zM26 12h2v1h-2zM30 12h1v1h-1zM32 12h2v1h-2zM7 13h1v1h-1zM10 13h1v1h-1zM14 13h2v1h-2zM17 13h4v1h-4zM22 13h3v1h-3zM30 13h5v1h-5zM4 14h1v1h-1zM6 14h1v1h-1zM8 14h1v1h-1zM10 14h1v1h-1zM12 14h2v1h-2zM16 14h3v1h-3zM21 14h2v1h-2zM24 14h1v1h-1zM26 14h2v1h-2zM30 14h2v1h-2zM33 14h2v1h-2zM2 15h6v1h-6zM10 15h1v1h-1zM13 15h1v1h-1zM17 15h1v1h-1zM19 15h2v1h-2zM25 15h2v1h-2zM28 15h1v1h-1zM33 15h2v1h-2zM2 16h2v1h-2zM5 16h1v1h-1zM7 16h2v1h-2zM12 16h1v1h-1zM14 16h2v1h-2zM17 16h3v1h-3zM22 16h1v1h-1zM27 16h7v1h-7zM5 17h1v1h-1zM7 17h1v1h-1zM9 17h1v1h-1zM11 17h7v1h-7zM20 17h1v1h-1zM23 17h3v1h-3zM27 17h2v1h-2zM30 17h3v1h-3zM2 18h1v1h-1zM4 18h1v1h-1zM6 18h4v1h-4zM11 18h1v1h-1zM13 18h1v1h-1zM17 18h3v1h-3zM24 18h2v1h-2zM27 18h1v1h-1zM29 18h2v1h-2zM34 18h1v1h-1zM4 19h3v1h-3zM11 19h3v1h-3zM18 19h1v1h-1zM20 19h2v1h-2zM25 19h1v1h-1zM28 19h2v1h-2zM31 19h2v1h-2zM34 19h1v1h-1zM2 20h2v1h-2zM7 20h4v1h-4zM13 20h3v1h-3zM17 20h1v1h-1zM20 20h1v1h-1zM26 20h1v1h-1zM29 20h2v1h-2zM32 20h1v1h-1zM3 21h1v1h-1zM5 21h1v1h-1zM12 21h2v1h-2zM16 21h2v1h-2zM21 21h3v1h-3zM27 21h1v1h-1zM29 21h6v1h-6zM2 22h1v1h-1zM4 22h1v1h-1zM8 22h1v1h-1zM10 22h3v1h-3zM16 22h1v1h-1zM20 22h1v1h-1zM24 22h4v1h-4zM29 22h3v1h-3zM33 22h2v1h-2zM2 23h2v1h-2zM6 23h1v1h-1zM10 23h3v1h-3zM15 23h4v1h-4zM22 23h1v1h-1zM25 23h1v1h-1zM27 23h2v1h-2zM31 23h1v1h-1zM34 23h1v1h-1zM2 24h1v1h-1zM5 24h1v1h-1zM8 24h3v1h-3zM12 24h2v1h-2zM15 24h2v1h-2zM19 24h1v1h-1zM21 24h1v1h-1zM28 24h1v1h-1zM33 24h1v1h-1zM2 25h1v1h-1zM6 25h1v1h-1zM12 25h4v1h-4zM18 25h1v1h-1zM21 25h3v1h-3zM26 25h1v1h-1zM31 25h3v1h-3zM2 26h1v1h-1zM4 26h5v1h-5zM11 26h1v1h-1zM13 26h2v1h-2zM19 26h1v1h-1zM21 26h2v1h-2zM24 26h8v1h-8zM10 27h1v1h-1zM14 27h2v1h-2zM18 27h4v1h-4zM26 27h1v1h-1zM30 27h1v1h-1zM32 27h1v1h-1zM34 27h1v1h-1zM2 28h7v1h-7zM14 28h1v1h-1zM17 28h1v1h-1zM19 28h1v1h-1zM22 28h1v1h-1zM24 28h3v1h-3zM28 28h1v1h-1zM30 28h1v1h-1zM32 28h2v1h-2zM2 29h1v1h-1zM8 29h1v1h-1zM10 29h2v1h-2zM13 29h2v1h-2zM17 29h10v1h-10zM30 29h4v1h-4zM2 30h1v1h-1zM4 30h3v1h-3zM8 30h1v1h-1zM10 30h2v1h-2zM14 30h1v1h-1zM17 30h2v1h-2zM26 30h6v1h-6zM34 30h1v1h-1zM2 31h1v1h-1zM4 31h3v1h-3zM8 31h1v1h-1zM10 31h2v1h-2zM13 31h1v1h-1zM17 31h1v1h-1zM19 31h2v1h-2zM25 31h3v1h-3zM30 31h5v1h-5zM2 32h1v1h-1zM4 32h3v1h-3zM8 32h1v1h-1zM10 32h9v1h-9zM20 32h1v1h-1zM22 32h1v1h-1zM24 32h1v1h-1zM28 32h2v1h-2zM2 33h1v1h-1zM8 33h1v1h-1zM11 33h2v1h-2zM14 33h2v1h-2zM17 33h1v1h-1zM21 33h4v1h-4zM30 33h3v1h-3zM2 34h7v1h-7zM10 34h1v1h-1zM13 34h2v1h-2zM16 34h4v1h-4zM21 34h2v1h-2zM25 34h2v1h-2zM28 34h2v1h-2zM33 34h1v1h-1z" fill="#1F3A5F"/></svg></div>
+      <p class="ins-nota" style="text-align:center">Android: descarga la app · iPhone: ábrelo en Safari</p>
+    </div>
+
+    <button class="ins-sec" onclick="abrir()">Abrir sin instalar</button>
   </div>
 
   <iframe id="marco" class="hidden" title="Inventario Hkjo." allow="clipboard-write"></iframe>
@@ -161,8 +204,21 @@
       if (esIOS) ir(); else enMarco();
     }
 
-    var instalada = window.matchMedia('(display-mode: standalone)').matches
+    var esAndroid = /Android/i.test(navigator.userAgent);
+    var desdeApk = /(^|[?&])app=1(&|$)/.test(location.search) || String(document.referrer).indexOf('android-app://') === 0;
+    var instalada = desdeApk || window.matchMedia('(display-mode: standalone)').matches
       || window.navigator.standalone === true;
+    var bip = null;
+    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); bip = e; });
+    function instalarChrome() {
+      if (bip) { bip.prompt(); bip = null; return; }
+      document.getElementById('insChrome').classList.remove('hidden');
+    }
+    function copiarLink(b) {
+      var url = location.origin + location.pathname;
+      try { navigator.clipboard.writeText(url).then(function () { b.textContent = '¡Copiado! Pégalo en Safari'; }, function () { prompt('Copia este link:', url); }); }
+      catch (e) { prompt('Copia este link:', url); }
+    }
     var directo = /(^|[?&])directo(=|&|$)/.test(location.search);
 
     if (directo) {
@@ -174,8 +230,12 @@
       // Primera vez / navegador normal: NO abre sola. Muestra como
       // instalarla (con el ícono correcto) y un boton para seguir igual.
       if (esIOS) {
-        document.getElementById('txtAndroid').classList.add('hidden');
-        document.getElementById('txtIphone').classList.remove('hidden');
+        document.getElementById('insIphone').classList.remove('hidden');
+        if (/CriOS|FxiOS|EdgiOS|GSA\/|OPiOS|Instagram|FBAN|FBAV|WhatsApp/i.test(navigator.userAgent)) document.getElementById('insNoSafari').classList.remove('hidden');
+      } else if (esAndroid) {
+        document.getElementById('insAndroid').classList.remove('hidden');
+      } else {
+        document.getElementById('insPc').classList.remove('hidden');
       }
       document.getElementById('cargando').classList.add('hidden');
       document.getElementById('instalar').classList.remove('hidden');
