@@ -194,14 +194,17 @@
       f.src = URL_APP;
       // Ayuda para salir si el marco queda en blanco; se oculta sola.
       var ay = document.getElementById('ayuda');
-      ay.classList.remove('hidden');
+      // En la app instalada de Android no se muestra el enlace para salir del marco.
+      if (!(instalada && !esIOS)) ay.classList.remove('hidden');
       f.addEventListener('load', function () {
         setTimeout(function () { ay.classList.add('hidden'); }, 9000);
       });
     }
 
+    // La app ya no pide cuenta de Google, así que también en iPhone se abre
+    // dentro del marco (sin el aviso de Google).
     function abrir() {
-      if (esIOS) ir(); else enMarco();
+      enMarco();
     }
 
     var esAndroid = /Android/i.test(navigator.userAgent);
