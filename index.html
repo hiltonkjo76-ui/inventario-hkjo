@@ -258,6 +258,7 @@
         document.getElementById('insAndroid').classList.remove('hidden');
       } else {
         document.getElementById('insPc').classList.remove('hidden');
+        var sub = document.querySelector('#instalar .ins-sub'); if (sub) sub.textContent = 'Instala la app en tu computador o celular';
       }
       document.getElementById('cargando').classList.add('hidden');
       document.getElementById('instalar').classList.remove('hidden');
